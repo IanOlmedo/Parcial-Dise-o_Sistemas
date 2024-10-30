@@ -1,1 +1,1 @@
-# Parcial-Dise-o_Sistemas
+# Parcial-D_Sistemas
