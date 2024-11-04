@@ -1,28 +1,32 @@
-# Use an official Python runtime as a parent image
+# Usa una imagen oficial de Python como base para la etapa de construcción
 FROM python:3.11.6-slim-bullseye AS builder
 
-# Set the working directory in the container to /app
+# Establece el directorio de trabajo en /app
 WORKDIR /app
 
-# Copy the requirements file into the container
+# Copia el archivo de requerimientos al contenedor
 COPY requirements.txt .
 
+# Instala las dependencias en la capa de construcción
 RUN pip install --no-cache-dir --user -r requirements.txt
 
-# Start a new stage to create a smaller image
+# Inicia una nueva etapa con una imagen más ligera
 FROM python:3.11.6-slim-bullseye
 
-# Copy installed packages from previous stage
+# Copia las dependencias instaladas en la etapa anterior
 COPY --from=builder /root/.local /root/.local
 
-# Make sure scripts in .local are usable:
+# Asegura que los scripts en .local sean utilizables
 ENV PATH=/root/.local/bin:$PATH
 
-# Set the working directory in the container to /app
+# Establece el directorio de trabajo en /app
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
+# Copia todo el contenido del proyecto al contenedor
 COPY . .
 
-# Run main.py when the container launches
-CMD ["python", "-m", "main"]
+# Expone el puerto en el que correrá FastAPI
+EXPOSE 8000
+
+# Comando para ejecutar la aplicación de FastAPI usando Uvicorn
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

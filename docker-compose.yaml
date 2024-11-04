@@ -1,5 +1,6 @@
-services:
+version: '3.8'
 
+services:
   fast_api_rest:
     build: .
     image: fast_api_rest
@@ -17,6 +18,8 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
+    depends_on:
+      - postgres
     networks:
       - fast_api_rest_network
 
@@ -34,9 +37,14 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - fast_api_rest_network
 
 networks:
   fast_api_rest_network:
     driver: bridge
+
+volumes:
+  postgres_data:
