@@ -1,4 +1,8 @@
-class DnaModel:
-    def __init__(self, sequence, is_mutant):
-        self.sequence = sequence
-        self.is_mutant = is_mutant
+from sqlalchemy import Column, String, Boolean
+from models.base_model import Base
+
+class DNAModel(Base):
+    __tablename__ = 'dna_records'
+    
+    dna_sequence = Column(String, primary_key=True, unique=True, nullable=False)
+    is_mutant = Column(Boolean, nullable=False)

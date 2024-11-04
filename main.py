@@ -14,3 +14,4 @@ def read_root():
 @app.get("/health_check")
 def health_check():
     return {"status": "ok"}
+
