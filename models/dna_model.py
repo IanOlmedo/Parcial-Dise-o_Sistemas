@@ -1,8 +1,8 @@
-from sqlalchemy import Column, String, Boolean
-from models.base_model import Base
+from sqlalchemy import Column, String, Boolean,ARRAY
+from models.base_model import BaseModel
 
-class DNAModel(Base):
+class DNAModel(BaseModel):
     __tablename__ = 'dna_records'
     
-    dna_sequence = Column(String, primary_key=True, unique=True, nullable=False)
+    dna_sequence = Column(ARRAY(String), nullable=False)
     is_mutant = Column(Boolean, nullable=False)
