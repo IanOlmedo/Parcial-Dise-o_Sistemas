@@ -1,28 +1,19 @@
-class DnaService:
+from repositories.base_repository_impl import BaseRepositoryImpl
+from repositories.dna_repository import DnaRepository
+from models.dna_model import DNAModel
+from schemas.dna_schema import DnaSchema
+from sqlalchemy.orm import Session
+from services.dna_validator import DnaValidator
+
+class DnaService(BaseRepositoryImpl):
+    def __init__(self, db: Session):
+        super().__init__(DnaRepository(db), DNAModel, DnaSchema)
+
     def is_mutant(self, dna: list[str]) -> bool:
-        n = len(dna)
-        sequences_found = 0
+        validator = DnaValidator(dna)
+        return validator.is_mutant()
 
-        def check_sequence(x, y, dx, dy):
-            # Verifica una secuencia de 4 letras en la dirección dada
-            base = dna[x][y]
-            for _ in range(1, 4):
-                x += dx
-                y += dy
-                if x < 0 or x >= n or y < 0 or y >= n or dna[x][y] != base:
-                    return False
-            return True
-
-        # Buscar secuencias de cuatro letras en cada dirección
-        for i in range(n):
-            for j in range(n):
-                if (
-                    (j <= n - 4 and check_sequence(i, j, 0, 1)) or  # Horizontal
-                    (i <= n - 4 and check_sequence(i, j, 1, 0)) or  # Vertical
-                    (i <= n - 4 and j <= n - 4 and check_sequence(i, j, 1, 1)) or  # Diagonal descendente \
-                    (i >= 3 and j <= n - 4 and check_sequence(i, j, -1, 1))  # Diagonal ascendente /
-                ):
-                    sequences_found += 1
-                if sequences_found > 1:
-                    return True
-        return False
+    def save_dna(self, dna: list[str]) -> int:
+        dna_schema = DnaSchema(sequence=dna)
+        dna_instance = self.save(dna_schema)
+        return dna_instance.id

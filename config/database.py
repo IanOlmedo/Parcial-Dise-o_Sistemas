@@ -2,8 +2,9 @@ import os
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, Session
-from models.base_model import Base  # Base general de tus modelos
+from models.base_model import BaseModel  # Base general de tus modelos
 
+# Carga las variables de entorno
 env_path = os.path.join(os.path.dirname(__file__), '../.env')
 load_dotenv(env_path)
 
@@ -38,14 +39,14 @@ class Database:
 
     def drop_database(self):
         try:
-            Base.metadata.drop_all(self._engine)
+            BaseModel.metadata.drop_all(self._engine)
             print("Tables dropped.")
         except Exception as e:
             print(f"Error dropping tables: {e}")
 
     def create_tables(self):
         try:
-            Base.metadata.create_all(self._engine)
+            BaseModel.metadata.create_all(self._engine)
             print("Tables created.")
         except Exception as e:
             print(f"Error creating tables: {e}")
@@ -64,3 +65,13 @@ class Database:
         except Exception as e:
             print(f"Error connecting to database: {e}")
             return False
+
+# Función para obtener la sesión de base de datos
+def get_db():
+    db_instance = Database()
+    db = db_instance.get_session()
+    try:
+        yield db
+    finally:
+        db_instance.close_session()
+
