@@ -15,6 +15,7 @@ POSTGRES_USER = os.getenv('POSTGRES_USER')
 POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')
 
 DATABASE_URI = f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}'
+print(DATABASE_URI)
 
 
 class Database:
@@ -74,4 +75,10 @@ def get_db():
         yield db
     finally:
         db_instance.close_session()
+
+# Crear una instancia de la base de datos y verificar la conexión
+db_instance = Database()
+connected = db_instance.check_connection()
+print("Connected to database:" if connected else "Not connected to database.")
+
 

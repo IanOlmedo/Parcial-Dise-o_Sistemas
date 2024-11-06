@@ -1,5 +1,7 @@
 # Parcial-D_Sistemas
 
+# Ian Olmedo
+
 # Secuencia para ejecutar
 Para iniciar esta API son necesarios realizar los siguientes comandos en la terminal del proyecto:
 
