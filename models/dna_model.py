@@ -4,5 +4,5 @@ from models.base_model import BaseModel
 class DNAModel(BaseModel):
     __tablename__ = 'dna_records'
     
-    dna_sequence = Column(ARRAY(String), nullable=False)
+    dna = Column(ARRAY(String), nullable=False)
     is_mutant = Column(Boolean, nullable=False)

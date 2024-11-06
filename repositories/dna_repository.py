@@ -1,14 +1,11 @@
 from typing import Type
-from sqlalchemy.orm import Session
 from models.dna_model import DNAModel
 from schemas.dna_schema import DnaSchema
 from repositories.base_repository_impl import BaseRepositoryImpl
 
 class DnaRepository(BaseRepositoryImpl):
-    def __init__(self, db: Session):
-        
+    def __init__(self):
         super().__init__(DNAModel, DnaSchema)
-        self._session = db 
 
     def save(self, dna_sequence: str, is_mutant: bool):
         dna_record = DNAModel(dna_sequence=dna_sequence, is_mutant=is_mutant)
